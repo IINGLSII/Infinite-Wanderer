@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "GameFramework/Info.h"
 #include "Chunk.h"
 #include "ChunkGenerator.generated.h"
 
@@ -11,23 +11,35 @@
  * 
  */
 UCLASS()
-class UChunkGenerator : public UObject
+class AChunkGenerator : public AInfo
 {
 	GENERATED_BODY()
 
 public:
 
-	UChunkGenerator();
+	AChunkGenerator();
 
 	UPROPERTY()
 	TArray<AChunk*> adjacency_grid;
 
-private:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float size;
+
+	UFUNCTION(BlueprintCallable)
 	void updateGrid(FVector location);
 
-	void cullChunks();
+	UPROPERTY(EditAnywhere)
+	TSubclassOf <class AChunk> ChunkBP;
 
-	void remapChunks();
+private:
 
-	void generateChunks();
+	void cullChunks(TArray<uint8>);
+
+	void remapChunks(TArray<uint8>, TArray<uint8>);
+
+	void generateChunks(TArray<uint8>);
+
+protected:
+
+	virtual void BeginPlay() override;
 };

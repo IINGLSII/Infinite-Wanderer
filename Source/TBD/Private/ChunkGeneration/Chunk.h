@@ -15,11 +15,14 @@ public:
 	// Sets default values for this actor's properties
 	AChunk();
 
-	static const float size;
+	static float size;
 
 	// returns int corresponding to player position in 3x3, 0-8 grid.
 	UFUNCTION()
 	uint8 check_player_adjacency(FVector location) const;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* earth;
 
 protected:
 	// Called when the game starts or when spawned
