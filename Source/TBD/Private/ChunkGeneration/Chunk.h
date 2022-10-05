@@ -14,15 +14,19 @@ class AChunk : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AChunk();
-
-	static float size;
+	AChunk(float chunk_size);
 
 	// returns int corresponding to player position in 3x3, 0-8 grid.
 	UFUNCTION()
-	uint8 check_player_adjacency(FVector location) const;
+	uint8 get_player_offset(FVector loc, bool dir = 0) const;
 
 	UPROPERTY(EditAnywhere)
-	class UStaticMeshComponent* earth;
+	class UStaticMeshComponent* floor;
+
+private:
+
+	UPROPERTY()
+	float size;
 
 protected:
 	// Called when the game starts or when spawned

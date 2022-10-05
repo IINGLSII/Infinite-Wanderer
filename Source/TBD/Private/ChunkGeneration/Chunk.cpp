@@ -3,15 +3,20 @@
 
 #include "ChunkGeneration/Chunk.h"
 
-float        AChunk::size = float(400);
-
 // Sets default values
 AChunk::AChunk()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+	floor = CreateDefaultSubobject<UStaticMeshComponent>("floor");
+	size = 400;
+	
+}
 
-	earth = CreateDefaultSubobject<UStaticMeshComponent>("earth");
+AChunk::AChunk(float chunk_size)
+{
+	AChunk::AChunk();
+	size = chunk_size;
 }
 
 // Called when the game starts or when spawned
@@ -27,24 +32,19 @@ void AChunk::Tick(float DeltaTime)
 
 }
 
-uint8 AChunk::check_player_adjacency(FVector location) const
+uint8 AChunk::get_player_offset(FVector loc, bool dir) const
 {
-	FVector offs = Super::GetActorLocation() - location;
-	uint8 player_3x3_loc = 4;
+	float offs;
+	if (dir)
+		offs = Super::GetActorLocation().X - loc.X;
+	else
+		offs = Super::GetActorLocation().Y - loc.Y;
 
-	if( abs(offs.X) > size ) {
-		if (offs.X > 0) 
-			player_3x3_loc += 1;
+	if (abs(offs) > size) {
+		if (offs > 0)
+			return 1;
 		else
-			player_3x3_loc -= 1;
+			return -1;
 	}
-
-	if (abs(offs.Y) > size) {
-		if (offs.Y > 0)
-			player_3x3_loc += 3;
-		else
-			player_3x3_loc -= 3;
-	}
-
-	return player_3x3_loc;
+	return 0;
 }

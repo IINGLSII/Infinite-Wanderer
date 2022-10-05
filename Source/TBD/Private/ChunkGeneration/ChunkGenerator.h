@@ -19,8 +19,10 @@ public:
 
 	AChunkGenerator();
 
+	const static int dim;
+
 	UPROPERTY()
-	TArray<AChunk*> adjacency_grid;
+	TArray<AChunk*> grid_array;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float size;
@@ -33,11 +35,11 @@ public:
 
 private:
 
-	void cullChunks(TArray<uint8>);
+	AChunk* get_chunk(uint8 r, uint8 c, TArray<AChunk*> &arr);
 
-	void remapChunks(TArray<uint8>, TArray<uint8>);
+	void set_chunk(uint8 r, uint8 c, AChunk* chunk);
 
-	void generateChunks(TArray<uint8>);
+	AChunk* spawnChunk(uint8 r, uint8 c);
 
 protected:
 
