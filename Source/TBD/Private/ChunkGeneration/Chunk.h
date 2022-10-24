@@ -14,14 +14,16 @@ class AChunk : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AChunk();
-	AChunk(float chunk_size);
 
 	// returns int corresponding to player position in 3x3, 0-8 grid.
 	UFUNCTION()
-	uint8 get_player_offset(FVector loc, bool dir = 0) const;
+	int8 get_player_offset(FVector loc, bool dir = 0) const;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UStaticMeshComponent* floor;
+
+	UFUNCTION()
+	void set_size(float x);
 
 private:
 

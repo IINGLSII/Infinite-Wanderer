@@ -9,15 +9,9 @@ AChunk::AChunk()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	floor = CreateDefaultSubobject<UStaticMeshComponent>("floor");
-	size = 400;
 	
 }
 
-AChunk::AChunk(float chunk_size)
-{
-	AChunk::AChunk();
-	size = chunk_size;
-}
 
 // Called when the game starts or when spawned
 void AChunk::BeginPlay()
@@ -32,19 +26,25 @@ void AChunk::Tick(float DeltaTime)
 
 }
 
-uint8 AChunk::get_player_offset(FVector loc, bool dir) const
+int8 AChunk::get_player_offset(FVector loc, bool dir) const
 {
 	float offs;
 	if (dir)
-		offs = Super::GetActorLocation().X - loc.X;
+		offs = loc.X - size / 2 - Super::GetActorLocation().X;
 	else
-		offs = Super::GetActorLocation().Y - loc.Y;
+		offs = loc.Y - size / 2 - Super::GetActorLocation().Y;
 
-	if (abs(offs) > size) {
+	if (abs(offs) > size/2) {
 		if (offs > 0)
 			return 1;
 		else
 			return -1;
 	}
 	return 0;
+}
+
+void AChunk::set_size(float x)
+{
+	if (x > 0)
+		AChunk::size = x;
 }
