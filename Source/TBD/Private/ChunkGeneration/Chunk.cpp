@@ -17,6 +17,7 @@ AChunk::AChunk()
 void AChunk::BeginPlay()
 {
 	Super::BeginPlay();
+	floor->SetRelativeScale3D(FVector(chunk_data.chunk_size / 400));
 }
 
 // Called every frame
@@ -26,15 +27,16 @@ void AChunk::Tick(float DeltaTime)
 
 }
 
+// returns the chunk offset of a given location, bool indicates axis (1 = X, 0 = Y)
 int8 AChunk::get_player_offset(FVector loc, bool dir) const
 {
 	float offs;
 	if (dir)
-		offs = loc.X - size / 2 - Super::GetActorLocation().X;
+		offs = loc.X - chunk_data.chunk_size / 2 - Super::GetActorLocation().X;
 	else
-		offs = loc.Y - size / 2 - Super::GetActorLocation().Y;
+		offs = loc.Y - chunk_data.chunk_size / 2 - Super::GetActorLocation().Y;
 
-	if (abs(offs) > size/2) {
+	if (abs(offs) > chunk_data.chunk_size / 2) {
 		if (offs > 0)
 			return 1;
 		else
@@ -43,8 +45,7 @@ int8 AChunk::get_player_offset(FVector loc, bool dir) const
 	return 0;
 }
 
-void AChunk::set_size(float x)
+void AChunk::load_chunk_data(FChunkData new_chunk_data)
 {
-	if (x > 0)
-		AChunk::size = x;
+	chunk_data = new_chunk_data;
 }
