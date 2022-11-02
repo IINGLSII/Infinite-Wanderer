@@ -111,8 +111,13 @@ void AChunkGenerator::populate_grid(bool flush_array)
 {
 	for (int8 row = -dim / 2; row <= dim / 2; row++) {
 		for (int8 col = -dim / 2; col <= dim / 2; col++) {
-			if (AChunkGenerator::get_chunk(row, col, grid_array) == nullptr || flush_array)
+			AChunk* chunk = AChunkGenerator::get_chunk(row, col, grid_array);
+			if (chunk == nullptr)
 				AChunkGenerator::spawn_chunk(row, col);
+			else if (flush_array) {
+				chunk->Destroy();
+				AChunkGenerator::spawn_chunk(row, col);
+			}
 		}
 	}
 }
