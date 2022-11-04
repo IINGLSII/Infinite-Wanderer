@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Chunk.generated.h"
+#include "Tile.generated.h"
 
 UENUM()
 enum class EWeather : uint8 {
@@ -32,16 +32,16 @@ enum class EEncounter : uint8 {
 
 
 USTRUCT()
-struct FChunkData
+struct FTileData
 {
 	GENERATED_BODY()
 
-	FChunkData() {
+	FTileData() {
 		weather = EWeather::CLEAR;
 		structure = EStructure::NONE;
 		encounter = EEncounter::NONE;
 		folliage_density = 0.5;
-		chunk_size = 400;
+		tile_size = 400;
 	}
 
 	UPROPERTY()
@@ -57,18 +57,18 @@ struct FChunkData
 		float folliage_density;
 
 	UPROPERTY()
-		float chunk_size;
+		float tile_size;
 };
 
 
 UCLASS()
-class AChunk : public AActor
+class ATile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AChunk();
+	ATile();
 
 	// returns int corresponding to player position in 3x3, 0-8 grid.
 	UFUNCTION()
@@ -78,12 +78,12 @@ public:
 		class UStaticMeshComponent* floor;
 
 	UFUNCTION()
-		void load_chunk_data(FChunkData new_chunk_data);
+		void load_tile_data(FTileData new_chunk_data);
 
 private:
 
 	UPROPERTY()
-		FChunkData chunk_data = FChunkData();
+		FTileData tile_data = FTileData();
 
 protected:
 	// Called when the game starts or when spawned
