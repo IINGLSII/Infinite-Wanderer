@@ -29,21 +29,26 @@ void ATile::Tick(float DeltaTime)
 }
 
 // returns the chunk offset of a given location, bool indicates axis (1 = X, 0 = Y)
-int8 ATile::get_player_offset(FVector loc, bool dir) const
+FOffset ATile::get_player_offset(FVector loc) const
 {
-	float offs;
-	if (dir)
-		offs = loc.X - tile_data.tile_size / 2 - Super::GetActorLocation().X;
-	else
-		offs = loc.Y - tile_data.tile_size / 2 - Super::GetActorLocation().Y;
+	FVector position_offset;
+	FOffset tile_offset = FOffset(0,0);
+	position_offset = loc - (tile_data.tile_size / 2) - Super::GetActorLocation();
 
-	if (abs(offs) > tile_data.tile_size / 2) {
-		if (offs > 0)
-			return 1;
+	if (abs(position_offset.X) > tile_data.tile_size / 2) {
+		if (position_offset.X > 0)
+			tile_offset.row = 1;
 		else
-			return -1;
+			tile_offset.row = -1;
 	}
-	return 0;
+
+	if (abs(position_offset.Y) > tile_data.tile_size / 2) {
+		if (position_offset.Y > 0)
+			tile_offset.col = 1;
+		else
+			tile_offset.col = -1;
+	}
+	return tile_offset;
 }
 
 void ATile::load_tile_data(FTileData new_tile_data)
