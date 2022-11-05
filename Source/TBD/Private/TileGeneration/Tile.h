@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Chunk.generated.h"
+#include "Tile.generated.h"
 
 UENUM()
 enum class EWeather : uint8 {
@@ -32,16 +32,16 @@ enum class EEncounter : uint8 {
 
 
 USTRUCT()
-struct FChunkData
+struct FTileData
 {
 	GENERATED_BODY()
 
-	FChunkData() {
+	FTileData() {
 		weather = EWeather::CLEAR;
 		structure = EStructure::NONE;
 		encounter = EEncounter::NONE;
 		folliage_density = 0.5;
-		chunk_size = 400;
+		tile_size = 400;
 	}
 
 	UPROPERTY()
@@ -57,41 +57,64 @@ struct FChunkData
 		float folliage_density;
 
 	UPROPERTY()
-		float chunk_size;
+		float tile_size;
+};
+
+USTRUCT()
+struct FOffset
+{
+	GENERATED_BODY()
+
+	FOffset() {
+		row = 0;
+		col = 0;
+	}
+
+	FOffset(int r, int c) {
+		row = r;
+		col = c;
+	}
+
+	UPROPERTY()
+		int row;
+
+	UPROPERTY()
+		int col;
 };
 
 
 UCLASS()
-class AChunk : public AActor
+class ATile : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AChunk();
+	ATile();
 
 	// returns int corresponding to player position in 3x3, 0-8 grid.
 	UFUNCTION()
-		int8 get_player_offset(FVector loc, bool dir = 0) const;
+		FOffset get_player_offset(FVector loc) const;
 
+	// placeholder mesh component
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class UStaticMeshComponent* floor;
 
+	// method called at spawn, before begin play, loads given tile data and appropriate structures.
 	UFUNCTION()
-		void load_chunk_data(FChunkData new_chunk_data);
+		void load_tile_data(FTileData new_tile_data);
 
 private:
 
+	// structure containing tile state information.
 	UPROPERTY()
-		FChunkData chunk_data = FChunkData();
+		FTileData tile_data = FTileData();
 
 protected:
 	// Called when the game starts or when spawned
-
 	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame
-
 	virtual void Tick(float DeltaTime) override;
 };
