@@ -80,6 +80,14 @@ struct FOffset
 
 	UPROPERTY()
 		int col;
+
+	friend bool operator==(FOffset OffsetA, FOffset OffsetB) {
+		return ((OffsetA.col == OffsetB.col) && (OffsetA.row == OffsetB.row));
+	}
+
+	friend bool operator!=(FOffset OffsetA, FOffset OffsetB) {
+		return !(OffsetA == OffsetB);
+	}
 };
 
 

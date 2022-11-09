@@ -5,22 +5,25 @@
 #include "CoreMinimal.h"
 #include "FunctionalTest.h"
 #include "TBD\Private\TileGeneration\TileGenerator.h"
-#include "TileGeneration_Test.generated.h"
+#include "TileGeneratorTest.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ATileGeneration_Test : public AFunctionalTest
+class ATileGeneratorTest : public AFunctionalTest
 {
 	GENERATED_BODY()
-	
-public:
-	ATileGeneration_Test();
 
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		ATileGenerator* generator;
+	ATileGenerator* generator;
+
+private:
+	// ensure all tiles maintain TILE_SIZE minimum distance.
+	void minimum_distance_TEST();
+
+	void unit_TEST();
 
 	virtual void StartTest() override;
-	
 };

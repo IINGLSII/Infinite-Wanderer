@@ -32,12 +32,12 @@ FOffset ATileGenerator::convert_idx_to_offset(int idx) const
 	return FOffset(-(idx / dim) + dim / 2, (idx % dim) - dim / 2);
 }
 
-int ATileGenerator::get_dim() 
+int ATileGenerator::get_dim() const 
 { 
 	return dim; 
 }
 
-float ATileGenerator::get_tile_size() 
+float ATileGenerator::get_tile_size() const
 { 
 	return tile_size; 
 }
@@ -45,6 +45,11 @@ float ATileGenerator::get_tile_size()
 ATile* ATileGenerator::get_tile(FOffset offset) const
 {
 	return get_tile(offset, grid_array);
+}
+
+ATile* ATileGenerator::get_tile_by_index(int32 idx) const
+{
+	return get_tile(convert_idx_to_offset(idx), grid_array);
 }
 
 ATile* ATileGenerator::get_tile (FOffset offset, const TArray<ATile*>& arr) const

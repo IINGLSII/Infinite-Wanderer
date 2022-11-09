@@ -8,7 +8,6 @@
 #include "Engine/Engine.h"
 #include "TileGenerator.generated.h"
 
-
 /**
  * 
  */
@@ -37,26 +36,34 @@ protected:
 	// tile size (end to end)
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float tile_size = 400;
+	// 4x4 transition matrices for markov chain process
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<FMatrix> ProbabilityMatricies;
 
 // MEMBER VARIABLES
 private:
 	// array of tiles of size (dim,dim) representing the players immediate surroundings
 	UPROPERTY()
 		TArray<ATile*> grid_array;
+		
 
 public:
 // INTERFACE FUNCTIONS
 	// returns the dimension of the grid
 	UFUNCTION()
-		int get_dim();
+		int get_dim() const;
 
 	// returns the tile size of the tiles within the grid
 	UFUNCTION()
-		float get_tile_size();
+		float get_tile_size() const;
 
 	// returns tile at a given row/columb offset from grid_array
 	UFUNCTION()
 		ATile* get_tile(FOffset offset) const;
+
+	// returns tile at specific index of the grid_array
+	UFUNCTION()
+		ATile* get_tile_by_index(int32 index) const;
 
 	// cull/update/spawn tiles according to a new given position.
 	UFUNCTION(BlueprintCallable)
@@ -66,6 +73,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void populate_grid(bool flush_array);
 
+
+// PURE FUNCTIONS
+	// returns True if given offsets fall within the grid
+	bool validate_offset(FOffset offset) const;
+
+	// converts row/center offset from center to array indices
+	int convert_offset_to_idx(FOffset offset) const;
+
+	// converts array_grid index to row/column offset
+	FOffset convert_idx_to_offset(int index) const;
 
 
 private:
@@ -79,15 +96,8 @@ private:
 	// spawn tile at r/c offset at grid_array
 	void spawn_tile(FOffset offset);
 
-	// returns True if given offsets fall within the grid
-	bool validate_offset(FOffset offset) const;
-
-	// converts row/center offset from center to array indices
-	int convert_offset_to_idx(FOffset offset) const;
-
-	// converts array_grid index to row/column offset
-	FOffset convert_idx_to_offset(int index) const;
-
 	// calculate new random tile information and load it into given tile. Calls tile update method.
 	void generate_tile(ATile* tile);
 };
+
+
